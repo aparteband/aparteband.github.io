@@ -1,0 +1,393 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  background: black;
+  overflow: hidden;
+}
+
+/* ---------- ЗВЁЗДЫ ---------- */
+#stars {
+  position: fixed;
+  inset: 0;
+  pointer-events: auto;
+}
+
+.star {
+  position: absolute;
+  cursor: pointer;
+  opacity: 0;
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.8));
+  animation:
+    starFall 2.8s cubic-bezier(0.22,0.9,0.3,1) forwards,
+    starPulse var(--speed) ease-in-out infinite;
+}
+
+.star.hover {
+  animation-play-state: running, paused;
+}
+
+.star.glow {
+  animation:
+    starFall 2.8s cubic-bezier(0.22,0.9,0.3,1) forwards,
+    starPulse var(--speed) ease-in-out infinite,
+    starGlow 1.2s ease-in-out forwards;
+}
+
+.star.glow-max {
+  animation:
+    starFall 2.8s cubic-bezier(0.22,0.9,0.3,1) forwards,
+    starPulse var(--speed) ease-in-out infinite,
+    starGlowMax 2s ease-in-out forwards;
+}
+
+@keyframes starFall {
+  from { opacity: 0; }
+  to   { opacity: 0.9; top: var(--final-top); }
+}
+
+@keyframes starPulse {
+  0% {
+    transform: scale(0.9) translate(var(--mx,0),var(--my,0));
+    opacity: .6;
+  }
+  50% {
+    transform: scale(1.1) translate(var(--mx,0),var(--my,0));
+    opacity: 1;
+  }
+  100% {
+    transform: scale(0.9) translate(var(--mx,0),var(--my,0));
+    opacity: .6;
+  }
+}
+
+@keyframes starGlow {
+  0% { filter: drop-shadow(0 0 6px rgba(255,255,255,.8)); }
+  50% {
+    filter:
+      drop-shadow(0 0 14px rgba(255,255,255,1))
+      drop-shadow(0 0 28px rgba(255,255,255,.6));
+  }
+  100% { filter: drop-shadow(0 0 6px rgba(255,255,255,.8)); }
+}
+
+@keyframes starGlowMax {
+  from {
+    filter: drop-shadow(0 0 6px rgba(255,255,255,.8));
+  }
+  to {
+    filter:
+      drop-shadow(0 0 18px rgba(255,255,255,1))
+      drop-shadow(0 0 36px rgba(255,255,255,.7));
+  }
+}
+
+/* ---------- ГЕРОЙ ---------- */
+#hero {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%,-50%);
+  max-width: 70vmin;
+  max-height: 70vmin;
+  pointer-events: none;
+  animation:
+    hero-enter 2.6s cubic-bezier(0.22,0.9,0.3,1) both,
+    breathe-body 6s ease-in-out infinite;
+  animation-delay: 0s, 2.6s;
+}
+
+@keyframes hero-enter {
+  from { transform: translate(-50%,140%); opacity: 0; }
+  to   { transform: translate(-50%,-50%); opacity: 1; }
+}
+
+@keyframes breathe-body {
+  0% { transform: translate(-50%,-50%); }
+  35% { transform: translate(-50%,-48%); }
+  65% { transform: translate(-50%,-49.5%); }
+  100% { transform: translate(-50%,-50%); }
+}
+
+/* ---------- ЗАМОК / СЕРДЦЕ ---------- */
+.castle,
+.heart {
+  position: fixed;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.castle.glow,
+.heart.glow {
+  animation:
+    appear 0.5s ease-out forwards,
+    scale-main 7.0s linear forwards,
+    dissolve 0.2s cubic-bezier(0.6,0,1,1) forwards,
+    glow-main 7.0s linear forwards;
+  animation-delay: 0s, 0s, 7.0s, 0s;
+}
+
+@keyframes appear {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes scale-main {
+  from { transform: scale(0.6667); }
+  to   { transform: scale(1); }
+}
+
+@keyframes dissolve {
+  from { opacity: 1; transform: scale(1); }
+  to   { opacity: 0; transform: scale(1.5); }
+}
+
+@keyframes glow-main {
+  0% { filter: drop-shadow(0 0 6px rgba(255,255,255,.8)); }
+  40% {
+    filter:
+      drop-shadow(0 0 14px rgba(255,255,255,1))
+      drop-shadow(0 0 28px rgba(255,255,255,.6));
+  }
+  100% {
+    filter:
+      drop-shadow(0 0 14px rgba(255,255,255,1))
+      drop-shadow(0 0 28px rgba(255,255,255,.6));
+  }
+}
+
+/* ---------- ИКОНКИ ---------- */
+.icon {
+  position: fixed;
+  bottom: 40px;
+  width: 42px;
+  opacity: 0;
+  cursor: pointer;
+  pointer-events: auto;
+
+  --hover-scale: 1;
+
+  transform:
+    translateX(0)
+    translateY(40px)
+    rotate(0deg)
+    scale(calc(0.6 * var(--hover-scale)));
+
+  animation:
+    icon-fan 0.9s cubic-bezier(0.22,0.9,0.3,1) forwards;
+
+  filter:
+    drop-shadow(0 0 4px rgba(255,255,255,0.22))
+    drop-shadow(0 0 10px rgba(255,255,255,0.12));
+
+  transition:
+    transform 1.3s cubic-bezier(0.18, 1.9, 0.38, 1),
+    filter 0.5s ease-out;
+}
+
+.icon:hover {
+  --hover-scale: 1.18;
+  filter:
+    drop-shadow(0 0 6px rgba(255,255,255,0.3))
+    drop-shadow(0 0 15px rgba(255,255,255,0.25));
+}
+
+.icon:active {
+  filter:
+    drop-shadow(0 0 8px rgba(255,255,255,0.6))
+    drop-shadow(0 0 20px rgba(255,255,255,0.45));
+}
+
+@keyframes icon-fan {
+  to {
+    opacity: 1;
+    transform:
+      translateX(var(--tx))
+      translateY(0)
+      rotate(var(--rot))
+      scale(calc(1 * var(--hover-scale)));
+  }
+}
+
+@keyframes icon-exit {
+  0% {
+    opacity: 1;
+    transform:
+      translateX(var(--tx))
+      translateY(0)
+      rotate(var(--rot))
+      scale(calc(1 * var(--hover-scale, 1)));
+  }
+  75% {
+    opacity: 1;
+    transform:
+      translateX(0)
+      translateY(40px)
+      rotate(0deg)
+      scale(calc(0.6 * var(--hover-scale, 1)));
+  }
+  100% {
+    opacity: 0;
+    transform:
+      translateX(0)
+      translateY(56px)
+      rotate(0deg)
+      scale(calc(0.55 * var(--hover-scale, 1)));
+  }
+}
+
+.icon.icon-exit {
+  animation: icon-exit 0.9s cubic-bezier(0.22,0.9,0.3,1) forwards;
+}
+
+/* ---------- ВСПЫШКА ЭКРАНА ---------- */
+.screen-flash {
+  position: fixed;
+  inset: 0;
+  background: rgba(255,255,255,0.35);
+  pointer-events: none;
+  animation: flashFade 0.5s ease-out forwards;
+}
+
+@keyframes flashFade {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+/* ---------- СЦЕНА: УЛЁТ ВВЕРХ ---------- */
+#scene-wrap {
+  position: fixed;
+  inset: 0;
+  will-change: transform;
+  transition: transform 1.6s cubic-bezier(0.22, 0.9, 0.3, 1);
+
+  z-index: 80;
+}
+
+/* FIX 5.1: вместо vh используем стабильный --vh */
+body.scene-fly-up #scene-wrap {
+  transform: translateY(calc(-120 * var(--vh, 1vh)));
+}
+
+/* ---------- СЦЕНА: ГОРА ---------- */
+#mountain-scene {
+  position: fixed;
+  inset: 0;
+  background: url("gora.png") no-repeat left bottom;
+  background-size: contain;
+
+  transform: translateY(calc(120 * var(--vh, 1vh)));
+  transition: transform 1.8s cubic-bezier(0.22, 0.9, 0.3, 1);
+
+  pointer-events: none;
+}
+
+body.scene-fly-up #mountain-scene {
+  transform: translateY(0);
+}
+
+/* ---------- МИНИ-ГЕРОЙ И САНКИ ---------- */
+#hero-mini {
+  position: fixed;
+  top: calc(5.5 * var(--vh, 1vh));
+  left: 8vw;
+
+  width: 6vmin;
+  opacity: 0;
+
+  transform: translate(-50%, -50%);
+  transition: opacity 0.8s ease-out;
+
+  pointer-events: none;
+
+  filter: brightness(5);
+}
+
+#sled {
+  position: fixed;
+  top: calc(8 * var(--vh, 1vh));
+  left: 9vw;
+
+  width: 8vmin;
+  opacity: 0;
+
+  transform: translate(-50%, -50%);
+  transition: opacity 0.8s ease-out;
+
+  pointer-events: none;
+
+  filter: brightness(2);
+}
+
+body.hero-ready #hero-mini,
+body.hero-ready #sled {
+  opacity: 1;
+}
+
+/* ---------- DROP ГОРЫ ---------- */
+@keyframes mountain-drop {
+  0%   { transform: translateY(0); }
+  70%  { transform: translateY(calc(132 * var(--vh, 1vh))); }
+  86%  { transform: translateY(calc(122 * var(--vh, 1vh))); }
+  100% { transform: translateY(calc(120 * var(--vh, 1vh))); }
+}
+
+body.mountain-drop #mountain-scene {
+  animation: mountain-drop 1.9s cubic-bezier(0.44, 0.9, 0.3, 1) forwards;
+}
+
+body.scene-reset #scene-wrap {
+  transition: none !important;
+  transform: translateY(0) !important;
+}
+
+/* ---------- ПАДЕНИЕ (переменная) ---------- */
+:root {
+  --fall-dur: 5.0s;
+  --vh: 1vh; /* fallback, JS перезапишет в px */
+}
+
+.star {
+  animation-duration: var(--fall-dur), var(--speed);
+}
+
+.star.glow {
+  animation-duration: var(--fall-dur), var(--speed), 1.2s;
+}
+
+.star.glow-max {
+  animation-duration: var(--fall-dur), var(--speed), 2s;
+}
+
+/* ===== ЕДИНАЯ СХЕМА СЛОЁВ ===== */
+#mountain-scene { z-index: 1; }
+#hero-mini { z-index: 6; }
+#sled { z-index: 5; }
+
+#hero { z-index: 50; }
+
+/* overlay-герой (финал) — управляется JS через display/opacity */
+#hero-overlay-full {
+  z-index: 55;
+  opacity: 0;
+  display: none;
+  pointer-events: none;
+}
+
+#stars { z-index: 90; }
+.icon { z-index: 110; }
+.castle, .heart { z-index: 120; }
+.screen-flash { z-index: 200; }
+
+/* ============================================================
+   MOBILE UI
+============================================================ */
+@media (hover: none) and (pointer: coarse) {
+  /* иконки */
+  .icon { width: 84px; bottom: auto !important; }
+
+  /* стартовая кнопка (перебиваем JS-инжект) */
+  #boot-start-btn { width: min(21vmin, 110px) !important; }
+
+  /* sub (перебиваем JS-инжект) */
+  #sub-after-turn { width: clamp(200px, 38vmin, 480px) !important; }
+}
