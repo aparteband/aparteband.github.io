@@ -1,0 +1,133 @@
+:root{
+  --vh: 1vh; /* JS перезапишет */
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #000;
+  overflow: hidden;
+}
+
+body{
+  touch-action: manipulation; /* против double-tap zoom */
+  -webkit-tap-highlight-color: transparent;
+}
+
+#app, #stage{
+  position: fixed;
+  inset: 0;
+}
+
+/* ---------- VIDEO (позиционирование правишь тут) ---------- */
+#bg-video{
+  position: fixed;
+  left: 0;
+  top: 0;
+
+  /* как было */
+  height: calc(100 * var(--vh, 1vh));
+  width: auto;
+
+  object-fit: cover;
+  object-position: left bottom;
+
+  transform: translateY(0);
+  pointer-events: none;
+}
+
+/* ---------- RELEASE TITLE (картинка по центру) ---------- */
+#release-title{
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  max-width: min(86vw, 900px);
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ---------- PINK PANEL ---------- */
+#pink-panel{
+  position: fixed;
+  left: 62vw;
+  top: 36vh;
+
+  background: rgba(253, 176, 192, 0.55);
+  border-radius: 10px;
+
+  padding: 16px 18px;
+  pointer-events: auto;
+}
+
+/* ссылки в столбик */
+#stream-links{
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.stream-link{
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  text-decoration: none;
+  user-select: none;
+}
+
+.stream-logo{
+  height: 44px;
+  width: auto;
+  display: block;
+  user-select: none;
+}
+
+/* ============================================================
+   ПК (ТОЛЬКО ДЕСКТОП) — правим только тут
+============================================================ */
+@media (min-width: 1024px){
+  /* видео: вернуть размеры как было (снять 50vw) */
+  #bg-video{
+    width: auto;
+    height: calc(100 * var(--vh, 1vh));
+    object-fit: cover;
+    object-position: left bottom;
+    transform: translateY(0);
+    z-index: 1;
+  }
+
+  /* плашка: центр */
+  #pink-panel{
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: min(44vw, 720px);
+    min-height: min(26vh, 300px);
+    padding: 26px 28px;
+    z-index: 2;
+  }
+
+  /* title: уменьшить в 2 раза (от прошлого ПК-значения) */
+  #release-title{
+    max-width: min(18vw, 290px);
+    z-index: 3;
+  }
+
+  /* стриминги: убрать с экрана на ПК */
+  #stream-links{
+    display: none;
+  }
+}
+
+/* мобильная адаптация (НЕ ТРОГАЕМ) */
+@media (hover: none) and (pointer: coarse){
+  #pink-panel{
+    left: 50%;
+    top: 62vh;
+    transform: translateX(-50%);
+  }
+  .stream-logo{
+    height: 48px;
+  }
+}
