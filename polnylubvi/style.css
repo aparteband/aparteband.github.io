@@ -1,0 +1,270 @@
+/* ============================================================
+   BASE
+============================================================ */
+:root{
+  --vh: 1vh; /* JS перезапишет в px */
+  --bg: #000;
+
+  /* Цвет прямоугольника (примерно как на обложке) */
+  --pink-rgb: 229,120,151;
+  --pink-a: 0.56;
+
+  /* Типографика: “как на обложке” (Didot/Bodoni вайб) */
+  --serif-ital:
+    "Didot",
+    "Bodoni 72",
+    "Bodoni MT",
+    "Libre Bodoni",
+    "Playfair Display",
+    "Georgia",
+    serif;
+
+  --text: rgba(255,255,255,0.92);
+  --text-dim: rgba(255,255,255,0.70);
+}
+
+html, body{
+  margin: 0;
+  padding: 0;
+  background: var(--bg);
+  color: var(--text);
+  overflow: hidden;
+
+  /* FIX: отключает double-tap zoom и дерготню */
+  touch-action: manipulation;
+}
+
+#page{
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+}
+
+/* ============================================================
+   VIDEO LEFT
+   - слева
+   - от низа
+   - до верха НЕ доходит ~10%
+   - без обрезки (contain)
+============================================================ */
+.video-slot{
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 48vw;
+  height: calc(90 * var(--vh, 1vh));
+  pointer-events: none;
+  z-index: 10;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-start;
+  padding-left: 0;
+  padding-bottom: 0;
+
+  /* чуть “встроить” в фон */
+  filter: contrast(1.02) brightness(1.02);
+}
+
+.pl-video{
+  width: 100%;
+  height: 100%;
+  object-fit: contain;  /* НЕ режем */
+  object-position: left bottom;
+  display: block;
+  opacity: 0.98;
+
+  /* микро-стабилизация */
+  transform: translateZ(0);
+  will-change: transform, opacity;
+}
+
+/* ============================================================
+   CENTER COMPOSITION
+============================================================ */
+.center-layer{
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none; /* клики только по ссылкам ниже */
+}
+
+/* розовый прямоугольник — по центру, как на обложке */
+.pink-rect{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: min(46vmin, 520px);
+  height: min(46vmin, 520px);
+  transform: translate(-50%, -50%);
+  background: rgba(var(--pink-rgb), var(--pink-a));
+
+  /* “плёнка” */
+  backdrop-filter: blur(0.6px);
+  -webkit-backdrop-filter: blur(0.6px);
+
+  /* чтобы не выглядел как “плашка из figma” */
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.04) inset,
+    0 0 40px rgba(var(--pink-rgb), 0.08);
+
+  pointer-events: none;
+}
+
+/* Текст/ссылки пересекают прямоугольник */
+.type-block{
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -52%); /* чуть выше центра как на обложке */
+  width: min(62vw, 820px);
+  pointer-events: none;
+}
+
+/* A PARTE — крупно сверху, “как на обложке” */
+.artist{
+  font-family: var(--serif-ital);
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+
+  font-size: clamp(44px, 9.5vmin, 128px);
+  line-height: 0.92;
+
+  color: rgba(255,255,255,0.92);
+  mix-blend-mode: screen;
+  text-shadow: 0 0 18px rgba(255,255,255,0.08);
+
+  /* пересечение с прямоугольником */
+  transform: translateY(-24%);
+}
+
+/* ПОЛНЫ ЛЮБВИ — мелко снизу, с розовым акцентом как на обложке */
+.release{
+  margin-top: clamp(14px, 2.2vmin, 22px);
+  font-family: var(--serif-ital);
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+
+  font-size: clamp(16px, 2.7vmin, 22px);
+  line-height: 1;
+
+  color: rgba(var(--pink-rgb), 0.95);
+  text-shadow:
+    0 0 14px rgba(var(--pink-rgb), 0.18);
+
+  /* на обложке — чуть левее */
+  transform: translateX(-2%);
+}
+
+/* Ссылки: 1 колонка, без кнопок, шрифтом “в тему” */
+.links{
+  margin-top: clamp(18px, 3.2vmin, 26px);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  /* чтобы список “врезался” в прямоугольник */
+  transform: translateX(14%);
+}
+
+.links a{
+  pointer-events: auto; /* ВАЖНО: кликабельны */
+  font-family: var(--serif-ital);
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+
+  font-size: clamp(15px, 2.3vmin, 20px);
+  line-height: 1.15;
+
+  color: var(--text-dim);
+  text-decoration: none;
+
+  width: fit-content;
+  max-width: 100%;
+
+  position: relative;
+  padding-bottom: 2px;
+}
+
+.links a::after{
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 1px;
+  background: rgba(255,255,255,0.18);
+  transform: scaleX(0.65);
+  transform-origin: left;
+  transition: transform 220ms ease, background 220ms ease;
+}
+
+.links a:hover{
+  color: rgba(255,255,255,0.92);
+}
+
+.links a:hover::after{
+  transform: scaleX(1);
+  background: rgba(var(--pink-rgb), 0.55);
+}
+
+.links a:active{
+  color: rgba(255,255,255,1);
+}
+
+/* ============================================================
+   MOBILE
+   - видео снизу, слева, но шире
+   - композиция читабельная
+============================================================ */
+@media (hover: none) and (pointer: coarse){
+  .video-slot{
+    width: 100vw;
+    height: calc(58 * var(--vh, 1vh)); /* снизу, не перекрываем верх */
+    opacity: 0.95;
+  }
+
+  .pl-video{
+    object-position: left bottom;
+  }
+
+  .pink-rect{
+    width: min(70vmin, 520px);
+    height: min(70vmin, 520px);
+  }
+
+  .type-block{
+    width: min(92vw, 820px);
+    transform: translate(-50%, -62%); /* выше, чтобы над видео было больше воздуха */
+  }
+
+  .artist{
+    font-size: clamp(40px, 12.5vmin, 92px);
+    transform: translateY(-18%);
+  }
+
+  .release{
+    font-size: clamp(14px, 4.2vmin, 18px);
+    transform: translateX(-1%);
+  }
+
+  .links{
+    transform: translateX(6%);
+    gap: 12px;
+  }
+
+  .links a{
+    font-size: clamp(14px, 4.2vmin, 18px);
+  }
+}
+
+/* ============================================================
+   REDUCED MOTION
+============================================================ */
+@media (prefers-reduced-motion: reduce){
+  .links a::after{ transition: none; }
+}
