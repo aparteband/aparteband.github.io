@@ -1,0 +1,161 @@
+:root{
+  --vh: 1vh; /* JS перезапишет в px */
+}
+
+/* базовая сцена */
+html, body{
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background: #000;
+  overflow: hidden;
+}
+
+body{
+  touch-action: manipulation; /* анти double-tap zoom на большинстве браузеров */
+  -webkit-text-size-adjust: 100%;
+}
+
+#stage{
+  position: fixed;
+  inset: 0;
+  background: #000;
+  overflow: hidden;
+}
+
+/* VIDEO */
+#bg-video{
+  position: fixed;
+  left: 0;
+  /* ширина видео — адекватно для десктопа/мобилы, чтобы не “съедало” всё */
+  width: clamp(240px, 34vw, 520px);
+
+  /* ВАЖНО по ТЗ:
+     - прижато к низу
+     - опущено вниз на 10% высоты экрана (10vh), низ обрезается
+     => bottom: -10vh и высота: 100vh (через стабильный --vh)
+  */
+  height: calc(100 * var(--vh, 1vh));
+  bottom: calc(-10 * var(--vh, 1vh));
+
+  object-fit: contain;        /* НЕ режем кадр внутри блока */
+  object-position: left bottom;
+
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* TITLE (картинка) — чуть выше центра */
+#release-title{
+  position: fixed;
+  left: 50%;
+  top: 42%;
+  transform: translate(-50%, -50%);
+  width: clamp(240px, 34vw, 560px);
+  height: auto;
+
+  pointer-events: none;
+  user-select: none;
+  -webkit-user-drag: none;
+
+  z-index: 5;
+}
+
+/* STREAM PANEL (плашка справа) */
+#stream-panel{
+  position: fixed;
+  right: 6vw;          /* “ровняем по правому краю” */
+  top: 52%;
+  /* “в 2 раза меньше” — делаем строго scale 0.5 */
+  transform: translateY(-50%) scale(0.5);
+  transform-origin: right center;
+
+  z-index: 6;
+}
+
+/* сама розовая плашка */
+#streams{
+  width: 360px; /* базовый размер, потом уменьшается scale(0.5) */
+  padding: 22px 18px;
+  border-radius: 22px;
+
+  background: rgba(253, 176, 192, 0.35); /* #fdb0c0 + прозрачность */
+  box-shadow:
+    0 12px 34px rgba(0,0,0,0.40);
+
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+
+  /* если браузер умеет — чуть “стекло” */
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* ссылки-строки */
+.stream{
+  display: block;
+  text-decoration: none;
+  border-radius: 14px;
+  padding: 10px 10px;
+
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* hover/active — очень мягко, без “кнопочности” */
+.stream:hover{
+  background: rgba(0,0,0,0.10);
+}
+.stream:active{
+  background: rgba(0,0,0,0.16);
+}
+
+/* ИКОНКИ:
+   - не растягиваем/не жмём по осям
+   - делаем единый “ряд” с одинаковой высотой
+   - JS потом подровняет “оптическую” высоту (по альфа-пикселям) */
+.stream-icon{
+  display: block;
+  height: 34px;      /* единая высота строки */
+  width: auto;       /* ширина авто = без искажений */
+  max-width: 100%;
+  object-fit: contain;
+
+  transform: scale(var(--icon-scale, 1));
+  transform-origin: left center;
+
+  user-select: none;
+  -webkit-user-drag: none;
+}
+
+/* MOBILE */
+@media (hover: none) and (pointer: coarse){
+  #bg-video{
+    width: clamp(210px, 56vw, 360px);
+  }
+
+  #release-title{
+    width: clamp(220px, 70vw, 520px);
+    top: 40%;
+  }
+
+  #stream-panel{
+    right: 4vw;
+    top: 60%;
+    /* на мобиле остаём “в 2 раза меньше” (0.5), но если будет слишком мелко —
+       правка одной цифрой: 0.6–0.7. Сейчас строго по ТЗ — 0.5. */
+    transform: translateY(-50%) scale(0.5);
+  }
+
+  #streams{
+    width: 320px; /* базовый, потом scale(0.5) */
+    padding: 20px 16px;
+    gap: 12px;
+  }
+
+  .stream-icon{
+    height: 32px;
+  }
+}
