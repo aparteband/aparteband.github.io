@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+  <meta name="color-scheme" content="dark" />
+  <title>polny lubvi</title>
+
+  <!-- Preload (чтобы быстрее после перехода с главной) -->
+  <link rel="preload" as="video" href="./video.mp4" type="video/mp4" />
+  <link rel="preload" as="image" href="./release_title.png" />
+  <link rel="preload" as="image" href="./spotify.png" />
+  <link rel="preload" as="image" href="./apple.png" />
+  <link rel="preload" as="image" href="./zvuk.png" />
+  <link rel="preload" as="image" href="./kion.png" />
+  <link rel="preload" as="image" href="./vk.png" />
+  <link rel="preload" as="image" href="./yandex.png" />
+
+  <link rel="stylesheet" href="./style.css" />
+</head>
+
+<body>
+  <div id="stage" aria-hidden="false">
+
+    <!-- VIDEO: слева, снизу, опущено на 10% => низ обрезается -->
+    <div id="videoWrap" aria-hidden="true">
+      <video id="clip" autoplay muted loop playsinline preload="auto">
+        <source src="./video.mp4" type="video/mp4" />
+      </video>
+    </div>
+
+    <!-- TITLE (картинка) по центру, чуть выше центра -->
+    <img
+      id="releaseTitle"
+      src="./release_title.png"
+      alt=""
+      draggable="false"
+    />
+
+    <!-- Розовая плашка с иконками-линками -->
+    <nav id="plate" aria-label="Слушать на стримингах">
+      <a class="stream" href="https://vk.ru/audio-2001043938_136043938спотик" target="_blank" rel="noopener noreferrer">
+        <img src="./spotify.png" alt="Spotify" draggable="false" />
+      </a>
+
+      <a class="stream" href="https://music.apple.com/ru/album/%D0%BF%D0%BE%D0%BB%D0%BD%D1%8B-%D0%BB%D1%8E%D0%B1%D0%B2%D0%B8/1808785284?i=1808785286" target="_blank" rel="noopener noreferrer">
+        <img src="./apple.png" alt="Apple Music" draggable="false" />
+      </a>
+
+      <a class="stream" href="https://share.zvuk.com/cLQ0/9bw5ym1b" target="_blank" rel="noopener noreferrer">
+        <img src="./zvuk.png" alt="Звук" draggable="false" />
+      </a>
+
+      <a class="stream" href="https://mts-music-spo.onelink.me/sKFX/ex58sdmo" target="_blank" rel="noopener noreferrer">
+        <img src="./kion.png" alt="KION" draggable="false" />
+      </a>
+
+      <a class="stream" href="https://vk.ru/audio-2001043938_136043938" target="_blank" rel="noopener noreferrer">
+        <img src="./vk.png" alt="VK" draggable="false" />
+      </a>
+
+      <a class="stream" href="https://music.yandex.ru/album/36297300/track/138373316?ref_id=4BDABF68-5903-4C4A-98A7-35D7E17B8213&utm_medium=copy_link" target="_blank" rel="noopener noreferrer">
+        <img src="./yandex.png" alt="Яндекс Музыка" draggable="false" />
+      </a>
+    </nav>
+
+  </div>
+
+  <script src="./main.js"></script>
+</body>
+</html>
