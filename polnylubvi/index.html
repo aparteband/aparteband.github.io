@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>полны любви — a parte</title>
+
+  <!-- favicon общий для всего домена -->
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+
+  <!-- локальные файлы -->
+  <link rel="preload" href="style.css" as="style">
+  <link rel="preload" href="main.js" as="script">
+  <link rel="preload" href="video.mp4" as="video" type="video/mp4">
+
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <!-- Видео-шот -->
+  <div id="video-wrap" aria-hidden="true">
+    <video
+      id="shot"
+      autoplay
+      muted
+      loop
+      playsinline
+      preload="auto"
+      webkit-playsinline
+    >
+      <source src="video.mp4" type="video/mp4" />
+    </video>
+  </div>
+
+  <!-- Центр-композиция -->
+  <main id="center">
+    <div id="pink" aria-hidden="true"></div>
+
+    <section id="type">
+      <a id="home" href="/" aria-label="На главную">a parte</a>
+
+      <div id="artist">A&nbsp;PARTE</div>
+      <div id="release">полны любви</div>
+
+      <nav id="streams" aria-label="Стриминги">
+        <a href="https://music.yandex.ru/album/36297300/track/138373316?ref_id=4BDABF68-5903-4C4A-98A7-35D7E17B8213&utm_medium=copy_link" target="_blank" rel="noopener noreferrer">Яндекс</a>
+        <a href="https://share.zvuk.com/cLQ0/9bw5ym1b" target="_blank" rel="noopener noreferrer">Звук</a>
+        <a href="https://mts-music-spo.onelink.me/sKFX/ex58sdmo" target="_blank" rel="noopener noreferrer">Кион</a>
+        <a href="https://music.apple.com/ru/album/%D0%BF%D0%BE%D0%BB%D0%BD%D1%8B-%D0%BB%D1%8E%D0%B1%D0%B2%D0%B8/1808785284?i=1808785286" target="_blank" rel="noopener noreferrer">Apple</a>
+        <a href="https://vk.ru/audio-2001043938_136043938" target="_blank" rel="noopener noreferrer">ВК</a>
+        <a href="https://vk.ru/audio-2001043938_136043938%D1%81%D0%BF%D0%BE%D1%82%D0%B8%D0%BA" target="_blank" rel="noopener noreferrer">Spotify</a>
+      </nav>
+    </section>
+  </main>
+
+  <script src="main.js"></script>
+</body>
+</html>
