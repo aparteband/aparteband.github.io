@@ -1,0 +1,225 @@
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #000;
+  overflow: hidden;
+  height: 100%;
+}
+
+:root{
+  /* iOS vh fix falls back */
+  --vh: 1vh;
+
+  /* Layout */
+  --top-gap: 10; /* percent */
+  --video-w: clamp(220px, 34vw, 560px);
+
+  /* Pink from cover: avg sampled */
+  --pink: 232, 121, 154;        /* #E8799A */
+  --pink-a: 0.58;
+
+  /* Pink rectangle ratio from cover: w/h ~ 678/1040 */
+  --rect-w: clamp(240px, 26vw, 420px);
+  --rect-ar: 678 / 1040;
+
+  /* Typography */
+  --display: "Playfair Display", serif;
+  --ui: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+#stage{
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: calc(var(--vh) * 100);
+  background: #000;
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* =========================
+   VIDEO (left, bottom, no crop)
+========================= */
+#videoWrap{
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  top: calc(var(--vh) * var(--top-gap));
+  width: var(--video-w);
+  z-index: 10;
+  pointer-events: none;
+}
+
+#bgVideo{
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* НЕ обрезаем */
+  object-position: left bottom;
+  display: block;
+}
+
+/* =========================
+   UI
+========================= */
+#ui{
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  pointer-events: none; /* клики только на ссылках */
+}
+
+/* Большой заголовок A PARTE как на обложке */
+#projectTitle{
+  position: absolute;
+  top: calc(var(--vh) * 3);
+  left: clamp(140px, 22vw, 420px);
+  right: 2vw;
+
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.92);
+
+  font-size: clamp(44px, 8.5vw, 120px);
+  line-height: 0.9;
+
+  white-space: nowrap;
+  user-select: none;
+}
+
+/* Розовый прямоугольник по центру (как на обложке) */
+#pinkRect{
+  position: absolute;
+
+  /* На обложке он чуть правее центра — здесь повторяем ощущение */
+  left: 58%;
+  top: 50%;
+
+  width: var(--rect-w);
+  aspect-ratio: var(--rect-ar);
+
+  transform: translate(-50%, -50%);
+  background: rgba(var(--pink), var(--pink-a));
+  border-radius: 2px;
+
+  user-select: none;
+}
+
+/* Контент: пересекает прямоугольник, но не “влезает идеально” */
+#content{
+  position: absolute;
+
+  left: 58%;
+  top: 50%;
+
+  transform: translate(-50%, -50%);
+  width: clamp(320px, 42vw, 640px);
+
+  pointer-events: none;
+}
+
+/* Название релиза */
+#releaseTitle{
+  position: relative;
+
+  /* Чуть ниже, чтобы пересекать прямоугольник как на обложке */
+  top: clamp(120px, 14vh, 190px);
+  left: clamp(-34px, -3vw, -10px);
+
+  font-family: var(--display);
+  font-style: italic;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+
+  color: rgba(var(--pink), 0.95);
+
+  font-size: clamp(18px, 2.2vw, 28px);
+  line-height: 1.05;
+
+  user-select: none;
+}
+
+/* Ссылки на стриминги */
+#links{
+  position: relative;
+
+  /* Пересекаем прямоугольник: стартуем выше, чтобы список заходил на него */
+  top: clamp(-10px, -1vh, 10px);
+  left: clamp(24px, 2.4vw, 44px);
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  pointer-events: auto; /* кликабельность */
+}
+
+#links a{
+  font-family: var(--ui);
+  font-weight: 400;
+  font-size: clamp(14px, 1.4vw, 16px);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+
+  color: rgba(255,255,255,0.88);
+  text-decoration: none;
+
+  width: fit-content;
+  padding: 2px 0;
+
+  outline: none;
+}
+
+#links a:hover{
+  color: rgba(255,255,255,0.98);
+}
+
+#links a:focus-visible{
+  box-shadow: 0 0 0 2px rgba(255,255,255,0.35);
+  border-radius: 6px;
+}
+
+/* =========================
+   Responsive
+========================= */
+
+/* На узких экранах сдвигаем композицию ближе к центру,
+   чтобы не “уезжало” вправо */
+@media (max-width: 820px){
+  #projectTitle{
+    left: 8vw;
+    right: 4vw;
+    white-space: normal;
+  }
+
+  #pinkRect, #content{
+    left: 52%;
+  }
+}
+
+/* На очень узких — уменьшаем видео, чтобы контент жил */
+@media (max-width: 520px){
+  :root{
+    --video-w: clamp(160px, 42vw, 260px);
+    --rect-w: clamp(220px, 56vw, 320px);
+  }
+
+  #projectTitle{
+    top: calc(var(--vh) * 2.5);
+    left: 6vw;
+    font-size: clamp(42px, 14vw, 76px);
+  }
+
+  #releaseTitle{
+    top: clamp(110px, 16vh, 170px);
+    left: -10px;
+  }
+
+  #links{
+    left: 16px;
+    gap: 10px;
+  }
+}
