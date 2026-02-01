@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>Полны любви</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+  <!-- VIDEO: слева, верх отступ 20vh, низ уходит за экран (обрез 20%) -->
+  <video id="bgVideo" autoplay muted loop playsinline preload="auto">
+    <source src="video.mp4" type="video/mp4" />
+  </video>
+
+  <!-- Название релиза: чуть выше центра, горизонтальное, размер ≈ плашке -->
+  <img id="releaseTitle" src="release_title.png" alt="Полны любви" />
+
+  <!-- Розовая вертикальная плашка со ссылками -->
+  <div id="panel" aria-label="Ссылки на стриминги">
+    <a id="lnkYandex"  class="link" target="_blank" rel="noopener noreferrer" aria-label="Яндекс Музыка">
+      <img src="yandex.png" alt="Яндекс" />
+    </a>
+
+    <a id="lnkZvuk" class="link" target="_blank" rel="noopener noreferrer" aria-label="Звук">
+      <img src="zvuk.png" alt="Звук" />
+    </a>
+
+    <a id="lnkKion" class="link" target="_blank" rel="noopener noreferrer" aria-label="Kion">
+      <img src="kion.png" alt="Kion" />
+    </a>
+
+    <a id="lnkApple" class="link" target="_blank" rel="noopener noreferrer" aria-label="Apple Music">
+      <img src="apple.png" alt="Apple Music" />
+    </a>
+
+    <a id="lnkVk" class="link" target="_blank" rel="noopener noreferrer" aria-label="ВК Музыка">
+      <img src="vk.png" alt="VK" />
+    </a>
+
+    <a id="lnkSpotify" class="link" target="_blank" rel="noopener noreferrer" aria-label="Spotify">
+      <img src="spotify.png" alt="Spotify" />
+    </a>
+  </div>
+
+  <script src="main.js"></script>
+</body>
+</html>
