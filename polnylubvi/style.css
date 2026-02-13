@@ -1,0 +1,166 @@
+:root{
+  --vh: 1vh; /* JS перезапишет */
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #000;
+  overflow: hidden;
+}
+
+body{
+  touch-action: manipulation; /* против double-tap zoom */
+  -webkit-tap-highlight-color: transparent;
+}
+
+#app, #stage{
+  position: fixed;
+  inset: 0;
+}
+
+/* ---------- VIDEO (позиционирование правишь тут) ---------- */
+#bg-video{
+  position: fixed;
+  left: 0;
+  top: 0;
+
+  /* как было */
+  height: calc(100 * var(--vh, 1vh));
+  width: auto;
+
+  object-fit: cover;
+  object-position: left bottom;
+
+  transform: translateY(0);
+  pointer-events: none;
+}
+
+/* ---------- RELEASE TITLE (картинка по центру) ---------- */
+#release-title{
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  max-width: min(86vw, 900px);
+  height: auto;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* ---------- PINK PANEL (слева, на всю высоту, заходит на проекцию) ---------- */
+#pink-panel{
+  position: fixed;
+  left: 0;
+  top: 0;
+
+  height: calc(100 * var(--vh, 1vh));
+  width: 40vw; /* JS перезапишет точным значением в px */
+
+  background: rgba(253, 176, 192, 0.55); /* #fdb0c0 + прозрачность */
+  border-radius: 0px;
+
+  padding: 0;
+  pointer-events: none;
+
+  /* чтобы плашка реально перекрывала проекцию */
+  z-index: 10001;
+}
+
+
+/* ============================================================
+   ПК (ТОЛЬКО ДЕСКТОП) — НАСТРОЙКИ ДЛЯ РЕГУЛИРОВКИ (МЕНЯЕШЬ ТУТ)
+   ------------------------------------------------------------
+   --desk-video-scale        : масштаб видео (1.10 = +10%)
+   --desk-video-shift-y      : подвинуть видео по Y (например: -2vh / 10px)
+
+   --desk-panel-offset-x     : смещение плашки по X (влево = отрицательное)
+   --desk-panel-offset-y     : смещение плашки по Y (вверх = отрицательное)
+   --desk-panel-width        : ширина плашки (делает её “длиннее”)
+   --desk-panel-min-height   : минимальная высота плашки
+   --desk-panel-padding-y/x  : внутренние отступы плашки
+
+   --desk-title-maxw         : максимальная ширина title (сейчас в 2 раза меньше)
+============================================================ */
+@media (min-width: 1024px){
+  :root{
+    --desk-video-scale: 1.10;         /* видео +10% */
+    --desk-video-shift-y: 0px;
+
+    --desk-panel-offset-x: -2vw;
+    --desk-panel-offset-y: -2vh;
+    --desk-panel-width: min(54vw, 880px);
+    --desk-panel-min-height: min(26vh, 300px);
+    --desk-panel-padding-y: 26px;
+    --desk-panel-padding-x: 28px;
+
+    --desk-title-maxw: min(18vw, 290px);
+
+    /* =========================
+       ЛИНИИ (ПК) — РЕГУЛИРОВКА
+       ========================= */
+    --desk-lines-opacity: 0.85;       /* прозрачность линий 0..1 */
+  }
+
+  #bg-video{
+    width: auto;
+    height: calc(100 * var(--vh, 1vh));
+    object-fit: cover;
+    object-position: left bottom;
+
+    transform-origin: left center;
+    transform: translateY(var(--desk-video-shift-y)) scale(var(--desk-video-scale));
+
+    z-index: 1;
+  }
+
+  /* CANVAS С ЛИНИЯМИ — поверх видео, но под плашкой/тайтлом */
+  #line-canvas{
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    user-select: none;
+    opacity: var(--desk-lines-opacity);
+    z-index: 2;
+  }
+
+  #pink-panel{
+    left: calc(50% + var(--desk-panel-offset-x));
+    top:  calc(50% + var(--desk-panel-offset-y));
+    transform: translate(-50%, -50%);
+
+    width: var(--desk-panel-width);
+    min-height: var(--desk-panel-min-height);
+
+    padding: var(--desk-panel-padding-y) var(--desk-panel-padding-x);
+
+    z-index: 3;
+  }
+
+  #release-title{
+    max-width: var(--desk-title-maxw);
+    z-index: 4;
+  }
+
+  #stream-links{
+    display: none;
+  }
+}
+
+
+/* мобильная адаптация (НЕ ТРОГАЕМ) */
+@media (hover: none) and (pointer: coarse){
+  #pink-panel{
+    left: 50%;
+    top: 62vh;
+    transform: translateX(-50%);
+  }
+  .stream-logo{
+    height: 48px;
+  }
+}
+/* скрыть видео везде, но оставить его в DOM (если линии завязаны на видео) */
+#bg-video{
+  opacity: 0;
+}
+
