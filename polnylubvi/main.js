@@ -76,7 +76,7 @@ const LINES_CFG = Object.freeze({
   avoidVideoPadPx: 14,       // ✅ отступ от видео (чтобы не касались)
   rightPadPx: 0,             // если нужен отступ справа — поставь, например, 24
 
-  fadeEdgePx: 120,            // ✅ ширина “сглаживания” границы слева (в px)
+  fadeEdgePx: 170,            // ✅ ширина “сглаживания” границы слева (в px)
   yOffsetPct: 0.20           // ✅ опустить проекцию на 10% высоты области
 });
 
@@ -433,10 +433,8 @@ function createLinesCanvas(stage) {
   const app = byId("app");
   if (!app) return;
 
-  // preloads (чтобы при переходе с aparte.band уже было в кеше максимально)
+  // preloads — теперь только видео (плашка+тайтл убраны)
   injectPreload(resolveLocal(CFG.videoSrc), "video", "video/mp4");
-  injectPreload(resolveLocal(CFG.releaseTitleSrc), "image");
-  CFG.streams.forEach(s => injectPreload(resolveLocal(s.img), "image"));
 
   // stage
   const stage = document.createElement("div");
@@ -454,50 +452,7 @@ function createLinesCanvas(stage) {
   video.setAttribute("webkit-playsinline", "");
   video.preload = "auto";
 
-  // title image (центр)
-  const title = document.createElement("img");
-  title.id = "release-title";
-  title.src = resolveLocal(CFG.releaseTitleSrc);
-  title.alt = "release title";
-  title.decoding = "async";
-  title.loading = "eager";
-  title.setAttribute("draggable", "false");
-
-  // pink panel
-  const panel = document.createElement("div");
-  panel.id = "pink-panel";
-  panel.setAttribute("aria-label", "streaming links");
-
-  // links column
-  const nav = document.createElement("nav");
-  nav.id = "stream-links";
-
-  CFG.streams.forEach((s) => {
-    const a = document.createElement("a");
-    a.className = "stream-link";
-    a.href = s.url;
-    a.target = "_blank";
-    a.rel = "noopener noreferrer";
-    a.setAttribute("aria-label", s.key);
-
-    const img = document.createElement("img");
-    img.className = "stream-logo";
-    img.src = resolveLocal(s.img);
-    img.alt = s.key;
-    img.decoding = "async";
-    img.loading = "eager";
-    img.setAttribute("draggable", "false");
-
-    a.appendChild(img);
-    nav.appendChild(a);
-  });
-
-  panel.appendChild(nav);
-
   stage.appendChild(video);
-  stage.appendChild(title);
-  stage.appendChild(panel);
-
   app.appendChild(stage);
 
   // lines overlay (PC only) — после того как видео уже в DOM
@@ -519,7 +474,6 @@ function createLinesCanvas(stage) {
   const GESTURE_EVT = window.PointerEvent ? "pointerdown" : (("ontouchstart" in window) ? "touchstart" : "mousedown");
   window.addEventListener(GESTURE_EVT, tryPlay, { passive: true, once: true });
 
-  // destroyLines оставлен на будущее (если потом захочешь включать/выключать)
   void destroyLines;
-
 })();
+
