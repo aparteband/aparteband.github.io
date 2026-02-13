@@ -1,0 +1,149 @@
+:root{
+  --vh: 1vh; /* JS перезапишет */
+
+  /* ===== ПРОЕКЦИЯ-ВИДЕО (регулировка) ===== */
+  --proj-left: 0px;          /* JS выставит */
+  --proj-fade: 170px;        /* ширина сглаживания стыка слева */
+  --proj-scale: 2;           /* x2 как было у проекции */
+  --proj-y-shift: 0px;       /* JS выставит (yOffsetPct) */
+
+  /* Цветокоррекция как на скрине (регулируешь тут при необходимости) */
+  --video-filter: grayscale(1) contrast(1.28) brightness(0.93);
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: #000;
+  overflow: hidden;
+}
+
+body{
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+
+#app, #stage{
+  position: fixed;
+  inset: 0;
+}
+
+/* ============================================================
+   ЛЕВЫЙ "ЯКОРЬ" (невидимый прямоугольник),
+   чтобы сохранить геометрию как у проекции раньше.
+   (на мобиле скрыт)
+============================================================ */
+#video-anchor{
+  position: fixed;
+  left: 0;
+  top: 0;
+  height: calc(100 * var(--vh, 1vh));
+  width: 0px;               /* JS выставит */
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ============================================================
+   ОБЛАСТЬ ПРОЕКЦИИ (справа) — теперь здесь крутится видео
+============================================================ */
+#proj-wrap{
+  position: fixed;
+  top: 0;
+  left: var(--proj-left);
+  width: calc(100vw - var(--proj-left));
+  height: calc(100 * var(--vh, 1vh));
+  overflow: hidden;
+  pointer-events: none;
+  user-select: none;
+  z-index: 2;
+
+  /* по умолчанию скрыто (мобилу не трогаем) */
+  display: none;
+
+  /* основной способ сглаживания края (маска) */
+  -webkit-mask-image: linear-gradient(
+    to right,
+    rgba(0,0,0,0) 0,
+    rgba(0,0,0,1) var(--proj-fade),
+    rgba(0,0,0,1) 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    rgba(0,0,0,0) 0,
+    rgba(0,0,0,1) var(--proj-fade),
+    rgba(0,0,0,1) 100%
+  );
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+}
+
+/* Fallback, если mask-image не сработал */
+#proj-wrap::before{
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--proj-fade);
+  height: 100%;
+  background: linear-gradient(to right, rgba(0,0,0,1), rgba(0,0,0,0));
+  pointer-events: none;
+}
+
+/* Само видео внутри области проекции */
+#bg-video{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: left bottom;
+
+  /* x2 как было у проекции + статический сдвиг вниз */
+  transform-origin: center center;
+  transform: translateY(var(--proj-y-shift)) scale(var(--proj-scale));
+
+  filter: var(--video-filter);
+
+  pointer-events: none;
+}
+
+/* ============================================================
+   PINK PANEL (слева, на всю высоту)
+   ширину задаёт JS в px (как у тебя было)
+============================================================ */
+#pink-panel{
+  position: fixed;
+  left: 0;
+  top: 0;
+  bottom: 0;
+
+  height: calc(100 * var(--vh, 1vh));
+  width: 40vw; /* JS перезапишет */
+
+  background: rgba(253, 176, 192, 0.55);
+  border-radius: 0px;
+  padding: 0;
+  pointer-events: none;
+
+  z-index: 3;
+
+  /* "всплывающая" */
+  box-shadow: 24px 0 60px rgba(0,0,0,0.35);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border-right: 1px solid rgba(255,255,255,0.10);
+}
+
+/* мобильная адаптация (НЕ ТРОГАЕМ) */
+@media (hover: none) and (pointer: coarse){
+  #pink-panel{
+    left: 50%;
+    top: 62vh;
+    bottom: auto;
+    transform: translateX(-50%);
+    height: auto;
+  }
+}
